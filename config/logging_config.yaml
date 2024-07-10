@@ -1,0 +1,58 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  error:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: standard
+    stream: ext://sys.stdout
+
+  file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: standard
+    filename: ${LOG_FILE:-financial_risk_assessment.log}
+    maxBytes: 10485760 # 10MB
+    backupCount: 20
+    encoding: utf8
+
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: error
+    filename: ${LOG_FILE:-financial_risk_assessment_error.log}
+    maxBytes: 10485760 # 10MB
+    backupCount: 20
+    encoding: utf8
+
+root:
+  level: ${LOG_LEVEL:-INFO}
+  handlers: [console, file_handler, error_file_handler]
+
+loggers:
+  werkzeug:
+    level: INFO
+    handlers: [console]
+    propagate: no
+
+  sqlalchemy.engine:
+    level: INFO
+    handlers: [console, file_handler]
+    propagate: no
+
+  celery:
+    level: INFO
+    handlers: [console, file_handler]
+    propagate: no
+
+  financial_risk_assessment:
+    level: DEBUG
+    handlers: [console, file_handler, error_file_handler]
+    propagate: no

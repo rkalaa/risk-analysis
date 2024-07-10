@@ -1,0 +1,4 @@
+[console_scripts]
+backtest-models = scripts.backtest_models:main
+generate-reports = scripts.generate_reports:main
+run-risk-assessment = scripts.run_risk_assessment:main
